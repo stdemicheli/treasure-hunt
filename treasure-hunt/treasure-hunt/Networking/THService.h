@@ -7,18 +7,18 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "THRoom.h"
+#import "THStatus.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface THService : NSObject
 
-@property (nonatomic, readonly) NSURL *baseUrl;
-
-- (void)moveInDirection:(NSString *)direction response:(void (^)(NSObject *room))response;
-- (void)moveInDirection:(NSString *)direction nextRoom:(NSString *)nextRoomId response:(void (^)(NSObject *room))response;
-- (void)sellTreasureWithName:(NSString *)treasureName response:(void (^)(NSObject *room))response;
-- (void)takeTreasureWithName:(NSString *)treasureName response:(void (^)(NSObject *room))response;
-- (void)checkInventoryWithResponse:(void (^)(NSObject *room))response;
+- (void)moveInDirection:(NSString *)direction roomId:(NSString *)roomId completion:(void (^)(THRoom *room, NSError *error))completion;
+- (void)moveInDirection:(NSString *)direction completion:(void (^)(THRoom *room, NSError *error))completion;
+- (void)sellTreasureWithName:(NSString *)treasureName completion:(void (^)(THRoom *room, NSError *error))completion;
+- (void)takeTreasureWithName:(NSString *)treasureName completion:(void (^)(THRoom *room, NSError *error))completion;
+- (void)checkInventoryWithResponse:(void (^)(THStatus *status, NSError *error))completion;
 
 @end
 
