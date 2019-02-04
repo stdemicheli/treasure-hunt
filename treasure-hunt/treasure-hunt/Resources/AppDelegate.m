@@ -7,6 +7,8 @@
 //
 
 #import "AppDelegate.h"
+#import "THExploration.h"
+#import "THService.h"
 
 @interface AppDelegate ()
 
@@ -16,7 +18,12 @@
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    // Override point for customization after application launch.
+    THExploration *exploration = [[THExploration alloc] init];
+    THService *service = [[THService alloc] init];
+    [exploration setNetworkService:service];
+    
+    [exploration explore];
+    
     return YES;
 }
 

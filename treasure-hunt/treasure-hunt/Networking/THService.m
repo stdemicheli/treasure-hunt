@@ -14,13 +14,18 @@ static NSString * const baseUrlString = @"https://lambda-treasure-hunt.herokuapp
 
 - (void)moveInDirection:(NSString *)direction roomId:(NSString *)roomId completion:(void (^)(THRoom *room, NSError *error))completion {
     NSURL *baseUrl = [[NSURL alloc] initWithString:baseUrlString];
-    [baseUrl URLByAppendingPathComponent:@"move"];
+    NSURL *url = [baseUrl URLByAppendingPathComponent:@"move"];
     
-    NSString *body = ([roomId isEqualToString:@""]) ? [NSString stringWithFormat:@"direction=%@", direction] : [NSString stringWithFormat:@"direction=%@&next_room_id=%@", direction, roomId];
-    NSData *data = [body dataUsingEncoding:NSUTF8StringEncoding];
+    NSDictionary *body = ([roomId isEqualToString:@""]) ? [[NSDictionary alloc] initWithObjectsAndKeys:direction, @"direction", nil] : [[NSDictionary alloc] initWithObjectsAndKeys:direction, @"direction", roomId, @"next_room_id", nil];
+
+    NSData *data = [NSJSONSerialization dataWithJSONObject:body options:0 error:nil];
+    NSString *key = [NSString stringWithFormat:@"Token %@", apiKey];
     
-    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:baseUrl];
+    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url];
     [request setHTTPMethod:@"POST"];
+    [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+    [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+    [request setValue:key forHTTPHeaderField:@"Authorization"];
     [request setHTTPBody:data];
     
     

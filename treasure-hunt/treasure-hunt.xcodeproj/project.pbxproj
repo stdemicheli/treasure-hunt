@@ -11,6 +11,7 @@
 		3D6C75602208E38600010C21 /* THHunt.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D6C755F2208E38600010C21 /* THHunt.m */; };
 		3D6C75632208E3A600010C21 /* THRoom.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D6C75622208E3A600010C21 /* THRoom.m */; };
 		3D6C75662208E3B100010C21 /* THStatus.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D6C75652208E3B100010C21 /* THStatus.m */; };
+		3D6C75692208F20900010C21 /* THMapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D6C75682208F20900010C21 /* THMapViewController.m */; };
 		3D702EF22208DB77003B559D /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D702EF12208DB77003B559D /* AppDelegate.m */; };
 		3D702EF82208DB77003B559D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3D702EF62208DB77003B559D /* Main.storyboard */; };
 		3D702EFA2208DB78003B559D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3D702EF92208DB78003B559D /* Assets.xcassets */; };
@@ -28,6 +29,8 @@
 		3D6C75622208E3A600010C21 /* THRoom.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = THRoom.m; sourceTree = "<group>"; };
 		3D6C75642208E3B100010C21 /* THStatus.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = THStatus.h; sourceTree = "<group>"; };
 		3D6C75652208E3B100010C21 /* THStatus.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = THStatus.m; sourceTree = "<group>"; };
+		3D6C75672208F20900010C21 /* THMapViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = THMapViewController.h; sourceTree = "<group>"; };
+		3D6C75682208F20900010C21 /* THMapViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = THMapViewController.m; sourceTree = "<group>"; };
 		3D702EED2208DB77003B559D /* treasure-hunt.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "treasure-hunt.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		3D702EF02208DB77003B559D /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		3D702EF12208DB77003B559D /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -128,6 +131,8 @@
 		3D702F0A2208DC6D003B559D /* ViewController */ = {
 			isa = PBXGroup;
 			children = (
+				3D6C75672208F20900010C21 /* THMapViewController.h */,
+				3D6C75682208F20900010C21 /* THMapViewController.m */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";
@@ -211,6 +216,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3D702F142208DE7A003B559D /* THService.m in Sources */,
+				3D6C75692208F20900010C21 /* THMapViewController.m in Sources */,
 				3D6C75662208E3B100010C21 /* THStatus.m in Sources */,
 				3D702F002208DB78003B559D /* main.m in Sources */,
 				3D702EF22208DB77003B559D /* AppDelegate.m in Sources */,

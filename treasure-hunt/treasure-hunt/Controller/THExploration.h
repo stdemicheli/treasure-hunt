@@ -7,11 +7,13 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "THService.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface THExploration : NSObject
 
+@property (nonatomic, strong) THService *networkService;
 @property (nonatomic, readonly) NSArray *traversalPath;
 @property (nonatomic, readonly) NSDictionary *traversalGraph;
 @property (nonatomic, readonly) NSArray *traversedPath;
