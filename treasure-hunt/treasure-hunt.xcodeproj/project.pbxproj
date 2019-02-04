@@ -1,0 +1,415 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 50;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		3D6C755D2208E23100010C21 /* THExploration.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D6C755C2208E23100010C21 /* THExploration.m */; };
+		3D6C75602208E38600010C21 /* THHunt.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D6C755F2208E38600010C21 /* THHunt.m */; };
+		3D6C75632208E3A600010C21 /* THRoom.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D6C75622208E3A600010C21 /* THRoom.m */; };
+		3D6C75662208E3B100010C21 /* THStatus.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D6C75652208E3B100010C21 /* THStatus.m */; };
+		3D702EF22208DB77003B559D /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D702EF12208DB77003B559D /* AppDelegate.m */; };
+		3D702EF82208DB77003B559D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3D702EF62208DB77003B559D /* Main.storyboard */; };
+		3D702EFA2208DB78003B559D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3D702EF92208DB78003B559D /* Assets.xcassets */; };
+		3D702EFD2208DB78003B559D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3D702EFB2208DB78003B559D /* LaunchScreen.storyboard */; };
+		3D702F002208DB78003B559D /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D702EFF2208DB78003B559D /* main.m */; };
+		3D702F142208DE7A003B559D /* THService.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D702F132208DE7A003B559D /* THService.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		3D6C755B2208E23100010C21 /* THExploration.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = THExploration.h; sourceTree = "<group>"; };
+		3D6C755C2208E23100010C21 /* THExploration.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = THExploration.m; sourceTree = "<group>"; };
+		3D6C755E2208E38600010C21 /* THHunt.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = THHunt.h; sourceTree = "<group>"; };
+		3D6C755F2208E38600010C21 /* THHunt.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = THHunt.m; sourceTree = "<group>"; };
+		3D6C75612208E3A600010C21 /* THRoom.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = THRoom.h; sourceTree = "<group>"; };
+		3D6C75622208E3A600010C21 /* THRoom.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = THRoom.m; sourceTree = "<group>"; };
+		3D6C75642208E3B100010C21 /* THStatus.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = THStatus.h; sourceTree = "<group>"; };
+		3D6C75652208E3B100010C21 /* THStatus.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = THStatus.m; sourceTree = "<group>"; };
+		3D702EED2208DB77003B559D /* treasure-hunt.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "treasure-hunt.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		3D702EF02208DB77003B559D /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		3D702EF12208DB77003B559D /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		3D702EF72208DB77003B559D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		3D702EF92208DB78003B559D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		3D702EFC2208DB78003B559D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		3D702EFE2208DB78003B559D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		3D702EFF2208DB78003B559D /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		3D702F122208DE7A003B559D /* THService.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = THService.h; sourceTree = "<group>"; };
+		3D702F132208DE7A003B559D /* THService.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = THService.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		3D702EEA2208DB77003B559D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		3D702EE42208DB77003B559D = {
+			isa = PBXGroup;
+			children = (
+				3D702EEF2208DB77003B559D /* treasure-hunt */,
+				3D702EEE2208DB77003B559D /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		3D702EEE2208DB77003B559D /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				3D702EED2208DB77003B559D /* treasure-hunt.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		3D702EEF2208DB77003B559D /* treasure-hunt */ = {
+			isa = PBXGroup;
+			children = (
+				3D702F0B2208DC7D003B559D /* View */,
+				3D702F0A2208DC6D003B559D /* ViewController */,
+				3D702F092208DC19003B559D /* Controller */,
+				3D702F082208DC0F003B559D /* Networking */,
+				3D702F072208DBF5003B559D /* Model */,
+				3D702F062208DBE7003B559D /* Resources */,
+			);
+			path = "treasure-hunt";
+			sourceTree = "<group>";
+		};
+		3D702F062208DBE7003B559D /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				3D702EF02208DB77003B559D /* AppDelegate.h */,
+				3D702EF12208DB77003B559D /* AppDelegate.m */,
+				3D702EF62208DB77003B559D /* Main.storyboard */,
+				3D702EF92208DB78003B559D /* Assets.xcassets */,
+				3D702EFB2208DB78003B559D /* LaunchScreen.storyboard */,
+				3D702EFE2208DB78003B559D /* Info.plist */,
+				3D702EFF2208DB78003B559D /* main.m */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		3D702F072208DBF5003B559D /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				3D6C75612208E3A600010C21 /* THRoom.h */,
+				3D6C75622208E3A600010C21 /* THRoom.m */,
+				3D6C75642208E3B100010C21 /* THStatus.h */,
+				3D6C75652208E3B100010C21 /* THStatus.m */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		3D702F082208DC0F003B559D /* Networking */ = {
+			isa = PBXGroup;
+			children = (
+				3D702F122208DE7A003B559D /* THService.h */,
+				3D702F132208DE7A003B559D /* THService.m */,
+			);
+			path = Networking;
+			sourceTree = "<group>";
+		};
+		3D702F092208DC19003B559D /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				3D6C755B2208E23100010C21 /* THExploration.h */,
+				3D6C755C2208E23100010C21 /* THExploration.m */,
+				3D6C755E2208E38600010C21 /* THHunt.h */,
+				3D6C755F2208E38600010C21 /* THHunt.m */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		3D702F0A2208DC6D003B559D /* ViewController */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = ViewController;
+			sourceTree = "<group>";
+		};
+		3D702F0B2208DC7D003B559D /* View */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		3D702EEC2208DB77003B559D /* treasure-hunt */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 3D702F032208DB78003B559D /* Build configuration list for PBXNativeTarget "treasure-hunt" */;
+			buildPhases = (
+				3D702EE92208DB77003B559D /* Sources */,
+				3D702EEA2208DB77003B559D /* Frameworks */,
+				3D702EEB2208DB77003B559D /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "treasure-hunt";
+			productName = "treasure-hunt";
+			productReference = 3D702EED2208DB77003B559D /* treasure-hunt.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		3D702EE52208DB77003B559D /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				CLASSPREFIX = TH;
+				LastUpgradeCheck = 1010;
+				ORGANIZATIONNAME = "De MicheliStefano";
+				TargetAttributes = {
+					3D702EEC2208DB77003B559D = {
+						CreatedOnToolsVersion = 10.1;
+					};
+				};
+			};
+			buildConfigurationList = 3D702EE82208DB77003B559D /* Build configuration list for PBXProject "treasure-hunt" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 3D702EE42208DB77003B559D;
+			productRefGroup = 3D702EEE2208DB77003B559D /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				3D702EEC2208DB77003B559D /* treasure-hunt */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		3D702EEB2208DB77003B559D /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3D702EFD2208DB78003B559D /* LaunchScreen.storyboard in Resources */,
+				3D702EFA2208DB78003B559D /* Assets.xcassets in Resources */,
+				3D702EF82208DB77003B559D /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		3D702EE92208DB77003B559D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3D702F142208DE7A003B559D /* THService.m in Sources */,
+				3D6C75662208E3B100010C21 /* THStatus.m in Sources */,
+				3D702F002208DB78003B559D /* main.m in Sources */,
+				3D702EF22208DB77003B559D /* AppDelegate.m in Sources */,
+				3D6C755D2208E23100010C21 /* THExploration.m in Sources */,
+				3D6C75632208E3A600010C21 /* THRoom.m in Sources */,
+				3D6C75602208E38600010C21 /* THHunt.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		3D702EF62208DB77003B559D /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				3D702EF72208DB77003B559D /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		3D702EFB2208DB78003B559D /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				3D702EFC2208DB78003B559D /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		3D702F012208DB78003B559D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		3D702F022208DB78003B559D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		3D702F042208DB78003B559D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 84BULQXU2Q;
+				INFOPLIST_FILE = "$(SRCROOT)/treasure-hunt/Resources/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.stefano.treasure-hunt";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		3D702F052208DB78003B559D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 84BULQXU2Q;
+				INFOPLIST_FILE = "$(SRCROOT)/treasure-hunt/Resources/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.stefano.treasure-hunt";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		3D702EE82208DB77003B559D /* Build configuration list for PBXProject "treasure-hunt" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3D702F012208DB78003B559D /* Debug */,
+				3D702F022208DB78003B559D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		3D702F032208DB78003B559D /* Build configuration list for PBXNativeTarget "treasure-hunt" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3D702F042208DB78003B559D /* Debug */,
+				3D702F052208DB78003B559D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 3D702EE52208DB77003B559D /* Project object */;
+}
