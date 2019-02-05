@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "THService.h"
+#import "THRoom.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -19,9 +20,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly) NSArray *traversedPath;
 
 - (void)explore;
-- (void)traverse;
-- (void)traverseBack;
-
+- (void)traverseForwardInDirection:(NSString *)direction fromRoom:(THRoom *)prevRoom;
+- (void)traverseBackInDirection:(NSString *)direction fromRoom:(THRoom *)room;
 @end
 
 NS_ASSUME_NONNULL_END

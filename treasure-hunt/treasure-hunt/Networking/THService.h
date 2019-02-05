@@ -14,6 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface THService : NSObject
 
+- (void)initializeWithCompletion:(void (^)(THRoom *room, NSError *error))completion;
 - (void)moveInDirection:(NSString *)direction roomId:(NSString *)roomId completion:(void (^)(THRoom *room, NSError *error))completion;
 - (void)moveInDirection:(NSString *)direction completion:(void (^)(THRoom *room, NSError *error))completion;
 - (void)sellTreasureWithName:(NSString *)treasureName completion:(void (^)(THRoom *room, NSError *error))completion;
