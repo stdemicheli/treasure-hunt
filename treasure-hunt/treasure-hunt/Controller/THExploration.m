@@ -16,6 +16,7 @@
 @property (nonatomic, strong) NSMutableDictionary *__visitedGraph;
 @property (nonatomic, strong) NSMutableArray *__traversedPath;
 @property (nonatomic, strong) NSTimer *timer;
+@property (nonatomic) BOOL keepExploring;
 
 - (NSString *)getInverseDirectionFrom:(NSString *)direction;
 
@@ -28,62 +29,73 @@
     if (self) {
         _networkService = [[THService alloc] init];
         _room = [[THRoom alloc] init];
-        ___traversedPath = [[NSMutableArray alloc] init];
-//        NSDictionary *initialGraph = @{ @"0": [@{ @"n": @"?", @"e": @"?", @"w": @"?", @"s": @"?" } mutableCopy] };
-//        ___visitedGraph = [initialGraph mutableCopy];
+        ___traversalPath = [[NSMutableArray alloc] init];
         ___visitedGraph = [[NSMutableDictionary alloc] init];
         ___traversedPath = [[NSMutableArray alloc] init];
         _timer = [[NSTimer alloc] init];
+        _keepExploring = true;
         
         [self loadExploration];
     }
     return self;
 }
 
-- (void)explore {
+- (void)initializeExploration {
     [self.networkService initializeWithCompletion:^(THRoom * room, NSError * error) {
-        if (room == NULL) {
+        if (room == nil) {
             NSLog(@"Fetched room was nil after initializing");
             return;
         }
         self.room = room;
         
-        // TODO: need to check first if in graph
         if (self.__visitedGraph[room.roomId] == NULL) {
             self.__visitedGraph[room.roomId] = [@{ @"n": @"?", @"e": @"?", @"w": @"?", @"s": @"?" } mutableCopy];
         }
         
-        NSArray *exits = room.exits;
-        NSMutableDictionary *curr_exits = self.__visitedGraph[room.roomId];
-        NSMutableArray *unexploredExits = [[NSMutableArray alloc] init];
-        for (NSString *exit in exits) {
-            if ([curr_exits[exit] isEqualToString:@"?"]) {
-                [unexploredExits addObject:exit];
-            }
-        }
-        
-        if (unexploredExits.count > 0) {
-            [self traverseForwardInDirection:unexploredExits[0] fromRoom:room];
-        } else {
-            //[self traverseBack];
-        }
+        [self explore];
     }];
-    // time out?
+}
+
+- (void)explore {NSArray *exits = self.room.exits;
+    NSMutableDictionary *curr_exits = self.__visitedGraph[self.room.roomId];
+    NSMutableArray *unexploredExits = [[NSMutableArray alloc] init];
+    for (NSString *exit in exits) {
+        if ([curr_exits[exit] isEqualToString:@"?"]) {
+            [unexploredExits addObject:exit];
+        }
+    }
+    
+    NSLog(@"Current room: %@", self.room.roomId);
+    NSLog(@"Cooldown: %@", self.room.cooldown);
+    NSLog(@"Dictionary: %@", [self.__visitedGraph description]);
+    
+    if (unexploredExits.count > 0) {
+        dispatch_time_t cooldown = dispatch_time(DISPATCH_TIME_NOW, [self.room.cooldown doubleValue] * NSEC_PER_SEC);
+        dispatch_after(cooldown, dispatch_get_main_queue(), ^{
+            NSLog(@"Traversing forward to: %@", unexploredExits[0]);
+            [self traverseForwardInDirection:unexploredExits[0] fromRoom:self.room];
+        });
+    } else {
+        dispatch_time_t cooldown = dispatch_time(DISPATCH_TIME_NOW, [self.room.cooldown doubleValue] * NSEC_PER_SEC);
+        dispatch_after(cooldown, dispatch_get_main_queue(), ^{
+            [self traverseBackInDirection];
+        });
+    }
 }
 
 - (void)traverseForwardInDirection:(NSString *)direction fromRoom:(THRoom *)prevRoom {
     [self.networkService moveInDirection:direction completion:^(THRoom * room, NSError * error) {
-        if (room == NULL) {
+        if (room == nil) {
             NSLog(@"Fetched room was nil after traversing forward");
             return;
         }
+        self.room = room;
         
         [self.__traversalPath addObject:direction];
         [self.__traversedPath addObject:direction];
-        self.room = room;
         
         // Checks if the entered room is in our visited graph.
-        if ([self.__visitedGraph objectForKey:room.roomId] == NULL) {
+        if ([self.__visitedGraph objectForKey:room.roomId] == nil) {
             NSMutableDictionary *enteredRoomExits = [[NSMutableDictionary alloc] init];
             for (NSString *exit in room.exits) {
                 enteredRoomExits[exit] = @"?";
@@ -97,24 +109,62 @@
         self.__visitedGraph[room.roomId][inverseDirection] = [prevRoom.roomId stringValue];
         
         [self saveExploration];
+        [self explore];
     }];
 }
 
-- (void)traverseBackInDirection:(NSString *)direction fromRoom:(THRoom *)room {
+- (void)traverseBackInDirection {
     // check next room we're traversing to
+    NSString *prevDirection = [self.__traversedPath lastObject];
+    [self.__traversedPath removeLastObject];
+    NSString *directionBack = [self getInverseDirectionFrom:prevDirection];
+    NSString *nextRoomId = self.__visitedGraph[self.room.roomId][directionBack];
+    NSLog(@"Traversing backwards to: %@ into room: %@", directionBack, nextRoomId);
+    [self.networkService moveInDirection:directionBack roomId:nextRoomId completion:^(THRoom *room, NSError *error) {
+        if (room == nil) {
+            NSLog(@"Fetched room was nil after traversing backwards");
+            return;
+        }
+        self.room = room;
+        [self saveExploration];
+        [self explore];
+    }];
 }
 
 #pragma mark - Private methods
 
 - (void)saveExploration {
-    NSData *graphData = [NSKeyedArchiver archivedDataWithRootObject:self.__visitedGraph requiringSecureCoding:FALSE error:NULL];
+    NSData *graphData = [NSKeyedArchiver archivedDataWithRootObject:self.__visitedGraph requiringSecureCoding:false error:nil];
     [NSUserDefaults.standardUserDefaults setObject:graphData forKey:@"graph"];
+    
+    NSData *traversalPathData = [NSKeyedArchiver archivedDataWithRootObject:self.__traversalPath requiringSecureCoding:false error:nil];
+    [NSUserDefaults.standardUserDefaults setObject:traversalPathData forKey:@"traversalPath"];
+    
+    NSData *traversedPathData = [NSKeyedArchiver archivedDataWithRootObject:self.__traversedPath requiringSecureCoding:false error:nil];
+    [NSUserDefaults.standardUserDefaults setObject:traversedPathData forKey:@"traversedPath"];
+    
 }
 
 - (void)loadExploration {
-    NSData *data = [NSUserDefaults.standardUserDefaults dataForKey:@"graph"];
-    NSMutableDictionary *loadedGraph = [NSKeyedUnarchiver unarchivedObjectOfClass:NSMutableDictionary.self fromData:data error:NULL];
-    self.__visitedGraph = loadedGraph;
+    NSData *graphData = [NSUserDefaults.standardUserDefaults dataForKey:@"graph"];
+    NSMutableDictionary *loadedGraph = [NSKeyedUnarchiver unarchivedObjectOfClass:NSMutableDictionary.self fromData:graphData error:nil];
+    
+    NSData *traversalPathData = [NSUserDefaults.standardUserDefaults dataForKey:@"traversalPath"];
+    NSMutableArray *loadedTraversalPath = [NSKeyedUnarchiver unarchivedObjectOfClass:NSMutableArray.self fromData:traversalPathData error:nil];
+    
+    NSData *traversedPathData = [NSUserDefaults.standardUserDefaults dataForKey:@"traversedPath"];
+    NSMutableArray *loadedTraversedPath = [NSKeyedUnarchiver unarchivedObjectOfClass:NSMutableArray.self fromData:traversedPathData error:nil];
+    
+    if (loadedGraph != nil) {
+        self.__visitedGraph = loadedGraph;
+    }
+    if (loadedTraversedPath != nil) {
+        [self.__traversedPath addObjectsFromArray:loadedTraversedPath];
+    }
+    if (loadedTraversalPath != nil) {
+        [self.__traversalPath addObjectsFromArray:loadedTraversalPath];
+    }
+    
 }
 
 - (NSString *)getInverseDirectionFrom:(NSString *)direction {

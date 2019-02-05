@@ -22,7 +22,7 @@
     THService *service = [[THService alloc] init];
     [exploration setNetworkService:service];
     
-    [exploration explore];
+    [exploration initializeExploration];
     
     return YES;
 }

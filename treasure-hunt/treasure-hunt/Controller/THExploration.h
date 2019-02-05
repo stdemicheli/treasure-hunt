@@ -19,9 +19,10 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly) NSDictionary *traversalGraph;
 @property (nonatomic, readonly) NSArray *traversedPath;
 
+- (void)initializeExploration;
 - (void)explore;
 - (void)traverseForwardInDirection:(NSString *)direction fromRoom:(THRoom *)prevRoom;
-- (void)traverseBackInDirection:(NSString *)direction fromRoom:(THRoom *)room;
+- (void)traverseBackInDirection;
 @end
 
 NS_ASSUME_NONNULL_END
