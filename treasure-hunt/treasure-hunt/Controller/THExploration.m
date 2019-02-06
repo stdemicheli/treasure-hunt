@@ -51,6 +51,10 @@
         
         if (self.__visitedGraph[room.roomId] == NULL) {
             self.__visitedGraph[room.roomId] = [@{ @"n": @"?", @"e": @"?", @"w": @"?", @"s": @"?" } mutableCopy];
+            self.__visitedGraph[room.roomId][@"coordinates"] = room.coordinates;
+            if (room.items.count > 0) {
+                self.__visitedGraph[room.roomId][@"items"] = room.items.firstObject;
+            }
         }
         
         [self explore];
@@ -67,16 +71,18 @@
         }
     }
     
-    NSLog(@"Current room: %@", self.room.roomId);
+    NSLog(@"Current room id: %@", self.room.roomId);
+    NSLog(@"Current room title: %@", self.room.title);
     NSLog(@"Cooldown: %@", self.room.cooldown);
     NSLog(@"Graph size: '%lu", [self.__visitedGraph count]);
     NSLog(@"Coordinates: %@", self.room.coordinates);
+    NSLog(@"graph: %@", self.__visitedGraph);
     
     dispatch_time_t cooldown = dispatch_time(DISPATCH_TIME_NOW, [self.room.cooldown doubleValue] * NSEC_PER_SEC);
     dispatch_after(cooldown, dispatch_get_main_queue(), ^{
         
-        [self pickUpTreasure];
-        [self sellTreasure];
+        //[self pickUpTreasure];
+        //[self sellTreasure];
         
         if (self.traversalGraph.count >= 500) {
             [self traverseInRandomDirection];
@@ -115,6 +121,10 @@
         NSString *inverseDirection = [self getInverseDirectionFrom:direction];
         self.__visitedGraph[prevRoom.roomId][direction] = [room.roomId stringValue];
         self.__visitedGraph[room.roomId][inverseDirection] = [prevRoom.roomId stringValue];
+        self.__visitedGraph[room.roomId][@"coordinates"] = room.coordinates;
+        if (room.items.count > 1) {
+            self.__visitedGraph[room.roomId][@"items"] = room.items.firstObject;
+        }
         
         [self saveExploration];
         [self explore];
@@ -145,6 +155,8 @@
     int randomIndex = arc4random_uniform(exits.count);
     NSString *randomDirection = exits[randomIndex];
     NSString *nextRoomId = self.__visitedGraph[self.room.roomId][randomDirection];
+    self.__visitedGraph[self.room.roomId][@"coordinates"] = self.room.coordinates;
+    self.__visitedGraph[self.room.roomId][@"items"] = self.room.items;
     NSLog(@"Traversing randomly to: %@ into room: %@", randomDirection, nextRoomId);
     
     [self.networkService moveInDirection:randomDirection roomId:nextRoomId completion:^(THRoom *room, NSError *error) {
@@ -159,26 +171,38 @@
 }
 
 - (void)pickUpTreasure {
-    if (self.room == nil) {
-        NSLog(@"Current room is nil, cannot pick up treasure");
-        [self restartExplorationWithLag:10.0];
-        return;
-    }
     NSArray *treasures = self.room.items;
     
     if (treasures.count > 0) {
-        for (NSString *treasure in treasures) {
-            [self.networkService takeTreasureWithName:treasure completion:^(THRoom *room, NSError * error) {
-                if (error != nil) {
-                    NSLog(@"Error picking up treasure");
-                    [self restartExplorationWithLag:10.0];
-                    return;
+        // TODO: check most worthy treasure to pick up
+        NSString *firstTreasure = treasures.lastObject;
+        
+        dispatch_time_t cooldown = dispatch_time(DISPATCH_TIME_NOW, [self.room.cooldown doubleValue] * NSEC_PER_SEC);
+        dispatch_after(cooldown, dispatch_get_main_queue(), ^{
+            [self.networkService checkInventoryWithResponse:^(THStatus *status, NSError *error) {
+                
+                NSInteger encumberance = [status.encumbrance integerValue];
+                NSInteger strength = [status.strength integerValue];
+                NSInteger deficit = encumberance - strength;
+                
+                if (deficit > 0) {
+                    dispatch_time_t cooldown = dispatch_time(DISPATCH_TIME_NOW, [status.cooldown doubleValue] * NSEC_PER_SEC);
+                    dispatch_after(cooldown, dispatch_get_main_queue(), ^{
+                        [self.networkService takeTreasureWithName:firstTreasure completion:^(THRoom *room, NSError * error) {
+                            if (error != nil || room == nil) {
+                                NSLog(@"Error picking up treasure");
+                                [self restartExplorationWithLag:10.0];
+                                return;
+                            }
+                            NSLog(@"Picked up treasure: %@", firstTreasure);
+                            self.room = room;
+                        }];
+                    });
                 }
-                NSLog(@"Picked up treasure: %@", treasure);
-                self.room = room;
             }];
-        }
+        });
     }
+    
 }
 
 - (void)sellTreasure {
@@ -200,29 +224,7 @@
                 });
             }
         }];
-        
     }
-}
-
-- (void)checkInventory {
-    [self.networkService checkInventoryWithResponse:^(THStatus *status, NSError *error) {
-        NSInteger encumberance = [status.encumbrance integerValue];
-        NSInteger strength = [status.strength integerValue];
-        NSInteger deficit = encumberance - strength;
-        
-        if (deficit > 0) {
-            // TODO: Add ability to check the least worthy items to drop
-            [self.networkService dropTreasureWithName:status.inventory.firstObject completion:^(THRoom * room, NSError *error) {
-                if (room == nil) {
-                    NSLog(@"Fetched room was nil after dropping treasure");
-                    [self restartExplorationWithLag:10.0];
-                    return;
-                }
-                self.room = room;
-                [self explore];
-            }];
-        }
-    }];
 }
 
 #pragma mark - Private methods
