@@ -25,6 +25,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)traverseBackInDirection;
 - (void)traverseInRandomDirection;
 - (void)pickUpTreasure;
+- (void)sellTreasure;
+
 @end
 
 NS_ASSUME_NONNULL_END

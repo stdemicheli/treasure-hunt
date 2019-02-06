@@ -44,6 +44,7 @@
     [self.networkService initializeWithCompletion:^(THRoom * room, NSError * error) {
         if (room == nil) {
             NSLog(@"Fetched room was nil after initializing");
+            [self restartExplorationWithLag:10.0];
             return;
         }
         self.room = room;
@@ -69,11 +70,13 @@
     NSLog(@"Current room: %@", self.room.roomId);
     NSLog(@"Cooldown: %@", self.room.cooldown);
     NSLog(@"Graph size: '%lu", [self.__visitedGraph count]);
-    
-    [self pickUpTreasure];
+    NSLog(@"Coordinates: %@", self.room.coordinates);
     
     dispatch_time_t cooldown = dispatch_time(DISPATCH_TIME_NOW, [self.room.cooldown doubleValue] * NSEC_PER_SEC);
     dispatch_after(cooldown, dispatch_get_main_queue(), ^{
+        
+        [self pickUpTreasure];
+        [self sellTreasure];
         
         if (self.traversalGraph.count >= 500) {
             [self traverseInRandomDirection];
@@ -91,6 +94,7 @@
     [self.networkService moveInDirection:direction completion:^(THRoom * room, NSError * error) {
         if (room == nil) {
             NSLog(@"Fetched room was nil after traversing forward");
+            [self restartExplorationWithLag:10.0];
             return;
         }
         self.room = room;
@@ -127,6 +131,7 @@
     [self.networkService moveInDirection:directionBack roomId:nextRoomId completion:^(THRoom *room, NSError *error) {
         if (room == nil) {
             NSLog(@"Fetched room was nil after traversing backwards");
+            [self restartExplorationWithLag:10.0];
             return;
         }
         self.room = room;
@@ -145,6 +150,7 @@
     [self.networkService moveInDirection:randomDirection roomId:nextRoomId completion:^(THRoom *room, NSError *error) {
         if (room == nil) {
             NSLog(@"Fetched room was nil after traversing randomly");
+            [self restartExplorationWithLag:10.0];
             return;
         }
         self.room = room;
@@ -155,19 +161,46 @@
 - (void)pickUpTreasure {
     if (self.room == nil) {
         NSLog(@"Current room is nil, cannot pick up treasure");
+        [self restartExplorationWithLag:10.0];
         return;
     }
     NSArray *treasures = self.room.items;
     
     if (treasures.count > 0) {
         for (NSString *treasure in treasures) {
-            [self.networkService takeTreasureWithName:treasure completion:^(NSError * error) {
+            [self.networkService takeTreasureWithName:treasure completion:^(THRoom *room, NSError * error) {
                 if (error != nil) {
                     NSLog(@"Error picking up treasure");
+                    [self restartExplorationWithLag:10.0];
+                    return;
                 }
                 NSLog(@"Picked up treasure: %@", treasure);
+                self.room = room;
             }];
         }
+    }
+}
+
+- (void)sellTreasure {
+    if ([self.room.title isEqualToString:@"Shop"]) {
+        [self.networkService checkInventoryWithResponse:^(THStatus *status, NSError *error) {
+            NSArray *treasures = status.inventory;
+            for (NSString *treasure in treasures) {
+                dispatch_time_t cooldown = dispatch_time(DISPATCH_TIME_NOW, [self.room.cooldown doubleValue] * NSEC_PER_SEC);
+                dispatch_after(cooldown, dispatch_get_main_queue(), ^{
+                    [self.networkService sellTreasureWithName:treasure completion:^(THRoom *room, NSError *error) {
+                        if (error != nil) {
+                            NSLog(@"Error selling up treasure");
+                            [self restartExplorationWithLag:10.0];
+                            return;
+                        }
+                        self.room = room;
+                        NSLog(@"Successfully sold treasure: %@", treasure);
+                    }];
+                });
+            }
+        }];
+        
     }
 }
 
@@ -219,6 +252,13 @@
     }
     
     return @"n";
+}
+
+- (void)restartExplorationWithLag:(double)lag {
+    dispatch_time_t cooldown = dispatch_time(DISPATCH_TIME_NOW, lag * NSEC_PER_SEC);
+    dispatch_after(cooldown, dispatch_get_main_queue(), ^{
+        [self explore];
+    });
 }
 
 #pragma mark - Properties
