@@ -204,6 +204,27 @@
     }
 }
 
+- (void)checkInventory {
+    [self.networkService checkInventoryWithResponse:^(THStatus *status, NSError *error) {
+        NSInteger encumberance = [status.encumbrance integerValue];
+        NSInteger strength = [status.strength integerValue];
+        NSInteger deficit = encumberance - strength;
+        
+        if (deficit > 0) {
+            // TODO: Add ability to check the least worthy items to drop
+            [self.networkService dropTreasureWithName:status.inventory.firstObject completion:^(THRoom * room, NSError *error) {
+                if (room == nil) {
+                    NSLog(@"Fetched room was nil after dropping treasure");
+                    [self restartExplorationWithLag:10.0];
+                    return;
+                }
+                self.room = room;
+                [self explore];
+            }];
+        }
+    }];
+}
+
 #pragma mark - Private methods
 
 - (void)saveExploration {
