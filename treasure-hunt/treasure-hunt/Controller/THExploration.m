@@ -56,7 +56,8 @@
     }];
 }
 
-- (void)explore {NSArray *exits = self.room.exits;
+- (void)explore {
+    NSArray *exits = self.room.exits;
     NSMutableDictionary *curr_exits = self.__visitedGraph[self.room.roomId];
     NSMutableArray *unexploredExits = [[NSMutableArray alloc] init];
     for (NSString *exit in exits) {
@@ -67,20 +68,23 @@
     
     NSLog(@"Current room: %@", self.room.roomId);
     NSLog(@"Cooldown: %@", self.room.cooldown);
-    NSLog(@"Dictionary: %@", [self.__visitedGraph description]);
+    NSLog(@"Graph size: '%lu", [self.__visitedGraph count]);
     
-    if (unexploredExits.count > 0) {
-        dispatch_time_t cooldown = dispatch_time(DISPATCH_TIME_NOW, [self.room.cooldown doubleValue] * NSEC_PER_SEC);
-        dispatch_after(cooldown, dispatch_get_main_queue(), ^{
+    [self pickUpTreasure];
+    
+    dispatch_time_t cooldown = dispatch_time(DISPATCH_TIME_NOW, [self.room.cooldown doubleValue] * NSEC_PER_SEC);
+    dispatch_after(cooldown, dispatch_get_main_queue(), ^{
+        
+        if (self.traversalGraph.count >= 500) {
+            [self traverseInRandomDirection];
+        } else if (unexploredExits.count > 0) {
             NSLog(@"Traversing forward to: %@", unexploredExits[0]);
             [self traverseForwardInDirection:unexploredExits[0] fromRoom:self.room];
-        });
-    } else {
-        dispatch_time_t cooldown = dispatch_time(DISPATCH_TIME_NOW, [self.room.cooldown doubleValue] * NSEC_PER_SEC);
-        dispatch_after(cooldown, dispatch_get_main_queue(), ^{
+        } else {
             [self traverseBackInDirection];
-        });
-    }
+        }
+        
+    });
 }
 
 - (void)traverseForwardInDirection:(NSString *)direction fromRoom:(THRoom *)prevRoom {
@@ -129,6 +133,42 @@
         [self saveExploration];
         [self explore];
     }];
+}
+
+- (void)traverseInRandomDirection {
+    NSArray *exits = self.room.exits;
+    int randomIndex = arc4random_uniform(exits.count);
+    NSString *randomDirection = exits[randomIndex];
+    NSString *nextRoomId = self.__visitedGraph[self.room.roomId][randomDirection];
+    NSLog(@"Traversing randomly to: %@ into room: %@", randomDirection, nextRoomId);
+    
+    [self.networkService moveInDirection:randomDirection roomId:nextRoomId completion:^(THRoom *room, NSError *error) {
+        if (room == nil) {
+            NSLog(@"Fetched room was nil after traversing randomly");
+            return;
+        }
+        self.room = room;
+        [self explore];
+    }];
+}
+
+- (void)pickUpTreasure {
+    if (self.room == nil) {
+        NSLog(@"Current room is nil, cannot pick up treasure");
+        return;
+    }
+    NSArray *treasures = self.room.items;
+    
+    if (treasures.count > 0) {
+        for (NSString *treasure in treasures) {
+            [self.networkService takeTreasureWithName:treasure completion:^(NSError * error) {
+                if (error != nil) {
+                    NSLog(@"Error picking up treasure");
+                }
+                NSLog(@"Picked up treasure: %@", treasure);
+            }];
+        }
+    }
 }
 
 #pragma mark - Private methods

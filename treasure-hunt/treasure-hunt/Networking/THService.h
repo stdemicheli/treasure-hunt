@@ -18,7 +18,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)moveInDirection:(NSString *)direction roomId:(NSString *)roomId completion:(void (^)(THRoom *room, NSError *error))completion;
 - (void)moveInDirection:(NSString *)direction completion:(void (^)(THRoom *room, NSError *error))completion;
 - (void)sellTreasureWithName:(NSString *)treasureName completion:(void (^)(THRoom *room, NSError *error))completion;
-- (void)takeTreasureWithName:(NSString *)treasureName completion:(void (^)(THRoom *room, NSError *error))completion;
+- (void)takeTreasureWithName:(NSString *)treasureName completion:(void (^)(NSError *error))completion;
 - (void)checkInventoryWithResponse:(void (^)(THStatus *status, NSError *error))completion;
 
 @end

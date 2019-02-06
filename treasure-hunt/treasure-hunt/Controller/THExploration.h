@@ -23,6 +23,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)explore;
 - (void)traverseForwardInDirection:(NSString *)direction fromRoom:(THRoom *)prevRoom;
 - (void)traverseBackInDirection;
+- (void)traverseInRandomDirection;
+- (void)pickUpTreasure;
 @end
 
 NS_ASSUME_NONNULL_END

@@ -117,8 +117,49 @@ static NSString * const apiKey = @"b9f6b168bcfa7d33e79d86b58647fdd722125e90";
     
 }
 
-- (void)takeTreasureWithName:(NSString *)treasureName completion:(void (^)(THRoom * enteredRoom, NSError * error))completion {
+- (void)takeTreasureWithName:(NSString *)treasureName completion:(void (^)(NSError * error))completion {
+    NSURL *baseUrl = [[NSURL alloc] initWithString:baseUrlString];
+    NSURL *url = [baseUrl URLByAppendingPathComponent:@"take"];
     
+    NSDictionary *body = [[NSDictionary alloc] initWithObjectsAndKeys:treasureName, @"name", nil];
+    
+    NSData *data = [NSJSONSerialization dataWithJSONObject:body options:0 error:nil];
+    NSString *key = [NSString stringWithFormat:@"Token %@", apiKey];
+    
+    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url];
+    [request setHTTPMethod:@"POST"];
+    [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+    [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+    [request setValue:key forHTTPHeaderField:@"Authorization"];
+    [request setHTTPBody:data];
+    
+    
+    [[[NSURLSession sharedSession] dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+        if (error) {
+            NSLog(@"Error fetching data: %@", error);
+            completion(error);
+            return;
+        }
+        
+        NSDictionary *dictionary = [NSJSONSerialization JSONObjectWithData:data options:0 error:NULL];
+        NSDictionary *errorMessage = dictionary[@"error"];
+        
+        if (![dictionary isKindOfClass:[NSDictionary class]]) {
+            NSLog(@"JSON was not a dictionary");
+            completion([[NSError alloc] init]);
+            return;
+        }
+        
+        if (errorMessage) {
+            NSString *message = errorMessage[@"message"];
+            NSLog(@"%@", message);
+            completion([[NSError alloc] init]);
+            return;
+        }
+        
+        completion(nil);
+        
+    }] resume];
 }
 
 - (void)checkInventoryWithResponse:(void (^)(THStatus * enteredRoom, NSError * error))completion{
