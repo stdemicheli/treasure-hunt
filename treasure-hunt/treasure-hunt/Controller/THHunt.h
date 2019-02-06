@@ -7,10 +7,15 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "THRoom.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface THHunt : NSObject
+
+@property (nonatomic, strong) THRoom *currentRoom;
+
+- (NSArray *)findShortestPathFromRoom:(THRoom *)currentRoom toRoom:(THRoom *)destination;
 
 @end
 
