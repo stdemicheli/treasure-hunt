@@ -2,7 +2,7 @@
 //  THMapViewController.h
 //  treasure-hunt
 //
-//  Created by De MicheliStefano on 04.02.19.
+//  Created by De MicheliStefano on 07.02.19.
 //  Copyright © 2019 De MicheliStefano. All rights reserved.
 //
 
@@ -11,6 +11,8 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface THMapViewController : UIViewController
+
+@property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
 
 @end
 

@@ -7,13 +7,45 @@
 //
 
 #import "THHunt.h"
+#import "THService.h"
+
+@interface THHunt ()
+
+@property (nonatomic, strong) THService *networkService;
+
+@end
 
 @implementation THHunt
 
-- (NSArray *)findShortestPathFromRoom:(THRoom *)currentRoom toRoom:(THRoom *)destination {
+- (instancetype)init
+{
+    self = [super init];
+    if (self) {
+        _networkService = [[THService alloc] init];
+        [self initializeHunt];
+    }
+    return self;
+}
+
+- (void)initializeHunt {
+    [self.networkService initializeWithCompletion:^(THRoom * room, NSError * error) {
+        if (room == nil) {
+            NSLog(@"Fetched room was nil after initializing");
+            return;
+        }
+        self.currentRoom = room;
+    }];
+}
+
+- (NSArray *)findShortestPathToRoom:(THRoom *)destination {
+    if (self.currentRoom == nil) {
+        NSLog(@"Can't find shortest path. Current room has not yet been defined");
+        return nil;
+    }
+    
     NSMutableArray *toVisit = [NSMutableArray new];
     NSMutableSet *visited = [NSMutableSet new];
-    [toVisit addObjectsFromArray:@[currentRoom.roomId]];
+    [toVisit addObjectsFromArray:@[self.currentRoom.roomId]];
     
     while (toVisit.count > 0) {
         NSMutableArray *deqPath = toVisit.firstObject;
