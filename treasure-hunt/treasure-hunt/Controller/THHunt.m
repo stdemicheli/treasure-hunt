@@ -12,6 +12,7 @@
 @interface THHunt ()
 
 @property (nonatomic, strong) THService *networkService;
+@property (nonatomic, strong) NSMutableDictionary *graph;
 
 @end
 
@@ -22,6 +23,7 @@
     self = [super init];
     if (self) {
         _networkService = [[THService alloc] init];
+        _graph = [self loadGraph];
     }
     return self;
 }
@@ -33,7 +35,55 @@
             return;
         }
         self.currentRoom = room;
+        [NSThread sleepForTimeInterval:[room.cooldown doubleValue]];
         completion();
+    }];
+}
+
+- (void)traverseToRoom:(NSNumber *)roomId {
+    [self findShortestPathToRoom:roomId completion:^(NSArray * shortestPath) {
+        NSLog(@"Shortest path: %@", shortestPath);
+        NSMutableArray *shortestPathM = [shortestPath mutableCopy];
+        [shortestPathM removeObjectAtIndex:0];
+        
+        while (shortestPathM.count > 0) {
+            NSNumber *currRoom = self.currentRoom.roomId;
+            NSNumber *nextRoom = shortestPathM.firstObject;
+            [shortestPathM removeObjectAtIndex:0];
+            NSString *nextDirection = [[NSString alloc] init];
+            
+            if (self.graph[currRoom] != nil) {
+                for (NSString *direction in self.graph[currRoom]) {
+                    if (self.graph[currRoom][direction] == [nextRoom stringValue]) {
+                        nextDirection = direction;
+                        break;
+                    }
+                }
+            }
+            
+            dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+            [NSThread sleepForTimeInterval:[self.currentRoom.cooldown doubleValue]];
+            [self.networkService moveInDirection:nextDirection roomId:[nextRoom stringValue] completion:^(THRoom *room, NSError * error) {
+                if (room == nil) {
+                    NSLog(@"Fetched room was nil after traversing to destination");
+                    return;
+                }
+                NSLog(@"Room title: %@", room.title);
+                NSLog(@"Moved to room: %@", room.roomId);
+                NSLog(@"Messages: %@", room.messages);
+                if (room.items.count > 1) {
+                    NSLog(@"TREASURE: %@ \n\n", room.items);
+                }
+                
+                if (room.items.count > 0) {
+                    [self pickUpTreasure];
+                }
+                
+                self.currentRoom = room;
+                dispatch_semaphore_signal(semaphore);
+            }];
+            dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
+        }
     }];
 }
 
@@ -62,8 +112,6 @@
             NSMutableArray *deqPath = toVisit.firstObject;
             [toVisit removeObjectAtIndex:0];
             NSNumber *deqRoomId = deqPath.lastObject;
-            NSLog(@"DeqRoomId: %@", deqRoomId);
-            NSLog(@"toVisit: %@", toVisit);
             
             if (![visited containsObject:deqRoomId]) {
                 if ([deqRoomId isEqualToNumber:roomId]) {
@@ -93,6 +141,32 @@
             }
         }
     });
+}
+
+- (void)pickUpTreasure {
+    NSArray *treasures = self.currentRoom.items;
+    
+    if (treasures.count > 0) {
+        dispatch_time_t cooldown = dispatch_time(DISPATCH_TIME_NOW, [self.currentRoom.cooldown doubleValue] * NSEC_PER_SEC);
+        dispatch_after(cooldown, dispatch_get_main_queue(), ^{
+            for (NSString *treasure in treasures) {
+                if ([treasure isEqualToString:@"amazing treasure"] || [treasure isEqualToString:@"spectacular treasure"] || [treasure isEqualToString:@"great treasure"] || [treasure isEqualToString:@"shiny treasure"]) {
+                    dispatch_time_t cooldown = dispatch_time(DISPATCH_TIME_NOW, [self.currentRoom.cooldown doubleValue] * NSEC_PER_SEC);
+                    dispatch_after(cooldown, dispatch_get_main_queue(), ^{
+                        [self.networkService takeTreasureWithName:treasure completion:^(THRoom *room, NSError * error) {
+                            if (error != nil || room == nil) {
+                                NSLog(@"Error picking up treasure");
+                                return;
+                            }
+                            NSLog(@"Picked up treasure: %@", treasure);
+                            self.currentRoom = room;
+                            return;
+                        }];
+                    });
+                }
+            }
+        });
+    }
 }
 
 - (NSMutableDictionary *)loadGraph {

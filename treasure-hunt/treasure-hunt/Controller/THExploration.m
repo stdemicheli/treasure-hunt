@@ -56,6 +56,7 @@
                 self.__visitedGraph[room.roomId][@"items"] = room.items.firstObject;
             }
         }
+        NSLog(@"Graph: %@", self.__visitedGraph);
         
         [self explore];
     }];

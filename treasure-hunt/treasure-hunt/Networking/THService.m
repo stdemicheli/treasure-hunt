@@ -99,6 +99,8 @@ static NSString * const apiKey = @"b9f6b168bcfa7d33e79d86b58647fdd722125e90";
             return;
         }
         
+//        NSLog(@"%@", [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
+//        
         THRoom *room = [[THRoom alloc] initWithDictionary:dictionary];
         if (room) {
             completion(room, nil);

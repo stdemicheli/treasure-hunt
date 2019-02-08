@@ -24,11 +24,8 @@
 //
 //    [exploration initializeExploration];
     THHunt *hunt = [THHunt new];
-    NSArray *shortestPath = [NSArray new];
-    NSNumber *room = [[NSNumber alloc] initWithInteger:479];
-    [hunt findShortestPathToRoom:room completion:^(NSArray * shortestPath) {
-        NSArray *shortpath = shortestPath;
-    }];
+    NSNumber *room = [[NSNumber alloc] initWithInteger:461];
+    [hunt traverseToRoom:room];
     
     
     return YES;
