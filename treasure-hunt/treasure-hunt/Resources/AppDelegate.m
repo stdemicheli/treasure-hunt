@@ -9,6 +9,7 @@
 #import "AppDelegate.h"
 #import "THExploration.h"
 #import "THService.h"
+#import "THHunt.h"
 
 @interface AppDelegate ()
 
@@ -22,14 +23,15 @@
 //    [exploration setNetworkService:service];
 //
 //    [exploration initializeExploration];
-//
+    THHunt *hunt = [THHunt new];
+    NSArray *shortestPath = [NSArray new];
+    NSNumber *room = [[NSNumber alloc] initWithInteger:479];
+    [hunt findShortestPathToRoom:room completion:^(NSArray * shortestPath) {
+        NSArray *shortpath = shortestPath;
+    }];
     
-    
-
     
     return YES;
 }
-
-
 
 @end

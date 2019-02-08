@@ -16,11 +16,15 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+    [self drawMap];
+}
+
+
+#pragma mark - Map Visualization
+
+- (void)drawMap {
     NSData *graphData = [NSUserDefaults.standardUserDefaults dataForKey:@"graph"];
     NSMutableDictionary *loadedGraph = [NSKeyedUnarchiver unarchivedObjectOfClass:NSMutableDictionary.self fromData:graphData error:nil];
-    
-    NSMutableArray *coordinates = [[NSMutableArray alloc] init];
     
     for (NSNumber *roomId in loadedGraph) {
         NSInteger xInt = [[loadedGraph[roomId][@"coordinates"] substringWithRange:NSMakeRange(1, 2)] integerValue];
@@ -37,7 +41,7 @@
     NSNumber *scrollHeight = [NSNumber numberWithInt:[cellSize intValue] * 35];
     
     [self.scrollView setContentSize:CGSizeMake([scrollWidth floatValue], [scrollHeight floatValue])];
-        
+    
     for (int y = 0; y <= 27; y++) {
         for (int x = 0; x <= 35; x++) {
             
@@ -61,12 +65,26 @@
             
             NSArray *directions = [self getDirectionsForRoom:loadedGraph[roomId]];
             [self drawBorderForView:view withDirections:directions];
+            //[self drawPathForView:view];
             
             isInCoordinates ? [view setBackgroundColor:[UIColor redColor]] : [view setBackgroundColor:[UIColor grayColor]];
             
             [self.scrollView addSubview:view];
         }
     }
+}
+
+- (void)drawPathForView:(UIView *)view {
+    UIBezierPath *path = [UIBezierPath bezierPath];
+    [path moveToPoint:view.center];
+    [path addLineToPoint:CGPointMake(CGRectGetMaxX(view.frame), view.center.y)];
+    
+    CAShapeLayer *shapeLayer = [CAShapeLayer layer];
+    shapeLayer.path = [path CGPath];
+    shapeLayer.strokeColor = [[UIColor blueColor] CGColor];
+    shapeLayer.lineWidth = 3.0;
+    
+    [view.layer addSublayer:shapeLayer];
 }
 
 - (void)drawBorderForView:(UIView *)view withDirections:(NSArray *)directions {

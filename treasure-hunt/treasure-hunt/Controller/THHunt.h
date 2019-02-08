@@ -15,7 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, strong) THRoom *currentRoom;
 
-- (NSArray *)findShortestPathToRoom:(THRoom *)destination;
+- (void)findShortestPathToRoom:(NSNumber *)roomId completion:(void (^) (NSArray *shortestPath))completion;
 
 @end
 

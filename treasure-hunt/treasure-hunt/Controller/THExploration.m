@@ -76,13 +76,16 @@
     NSLog(@"Cooldown: %@", self.room.cooldown);
     NSLog(@"Graph size: '%lu", [self.__visitedGraph count]);
     NSLog(@"Coordinates: %@", self.room.coordinates);
-    NSLog(@"graph: %@", self.__visitedGraph);
+    //NSLog(@"graph: %@", self.__visitedGraph);
     
     dispatch_time_t cooldown = dispatch_time(DISPATCH_TIME_NOW, [self.room.cooldown doubleValue] * NSEC_PER_SEC);
     dispatch_after(cooldown, dispatch_get_main_queue(), ^{
         
-        //[self pickUpTreasure];
+        [self pickUpTreasure];
         //[self sellTreasure];
+        if ([self.room.title isEqualToString:@"An Ancient Shrine"]) {
+            
+        }
         
         if (self.traversalGraph.count >= 500) {
             [self traverseInRandomDirection];
@@ -225,6 +228,18 @@
             }
         }];
     }
+}
+
+- (void)pray {
+    [self.networkService pray:^(THRoom * room, NSError * error) {
+        
+        if (room == nil) {
+            NSLog(@"Fetched room was nil after praying");
+            [self restartExplorationWithLag:10.0];
+            return;
+        }
+        self.room = room;
+    }];
 }
 
 #pragma mark - Private methods

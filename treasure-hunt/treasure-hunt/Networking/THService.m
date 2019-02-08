@@ -265,7 +265,7 @@ static NSString * const apiKey = @"b9f6b168bcfa7d33e79d86b58647fdd722125e90";
     }] resume];
 }
 
-- (void)checkInventoryWithResponse:(void (^)(THStatus *status, NSError *error))completion{
+- (void)checkInventoryWithResponse:(void (^)(THStatus *status, NSError *error))completion {
     NSURL *baseUrl = [[NSURL alloc] initWithString:baseUrlString];
     NSURL *url = [baseUrl URLByAppendingPathComponent:@"status"];
     
@@ -303,6 +303,51 @@ static NSString * const apiKey = @"b9f6b168bcfa7d33e79d86b58647fdd722125e90";
         THStatus *status = [[THStatus alloc] initWithDictionary:dictionary];
         if (status) {
             completion(status, nil);
+        } else {
+            completion(nil, [[NSError alloc] init]);
+        }
+        
+    }] resume];
+}
+
+- (void)pray:(void (^)(THRoom *room, NSError *error))completion {
+    NSURL *baseUrl = [[NSURL alloc] initWithString:baseUrlString];
+    NSURL *url = [baseUrl URLByAppendingPathComponent:@"pray"];
+    
+    NSString *key = [NSString stringWithFormat:@"Token %@", apiKey];
+    
+    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url];
+    [request setHTTPMethod:@"POST"];
+    [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+    [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+    [request setValue:key forHTTPHeaderField:@"Authorization"];
+    
+    [[[NSURLSession sharedSession] dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+        if (error) {
+            NSLog(@"Error fetching data: %@", error);
+            completion(nil, error);
+            return;
+        }
+        
+        NSDictionary *dictionary = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
+        NSDictionary *errorMessage = dictionary[@"error"];
+        
+        if (![dictionary isKindOfClass:[NSDictionary class]]) {
+            NSLog(@"JSON was not a dictionary");
+            completion(nil, [[NSError alloc] init]);
+            return;
+        }
+        
+        if (errorMessage) {
+            NSString *message = errorMessage[@"message"];
+            NSLog(@"%@", message);
+            completion(nil, [[NSError alloc] init]);
+            return;
+        }
+        
+        THRoom *room = [[THRoom alloc] initWithDictionary:dictionary];
+        if (room) {
+            completion(room, nil);
         } else {
             completion(nil, [[NSError alloc] init]);
         }

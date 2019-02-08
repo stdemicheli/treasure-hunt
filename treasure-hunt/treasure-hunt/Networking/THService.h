@@ -21,6 +21,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)takeTreasureWithName:(NSString *)treasureName completion:(void (^)(THRoom *room, NSError *error))completion;
 - (void)dropTreasureWithName:(NSString *)treasureName completion:(void (^)(THRoom *room, NSError * error))completion;
 - (void)checkInventoryWithResponse:(void (^)(THStatus *status, NSError *error))completion;
+- (void)pray:(void (^)(THRoom *room, NSError *error))completion;
 
 @end
 
